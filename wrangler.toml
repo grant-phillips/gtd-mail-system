@@ -1,0 +1,49 @@
+name = "gtd-mail-system"
+main = "src/workers/email-worker.ts"
+compatibility_date = "2024-03-31"
+
+# D1 Database
+[[d1_databases]]
+binding = "DB"
+database_name = "gtd-mail-db"
+database_id = "" # You'll need to fill this in after creating the database
+
+# R2 Bucket
+[[r2_buckets]]
+binding = "EMAIL_BUCKET"
+bucket_name = "gtd-mail-emails"
+preview_bucket_name = "gtd-mail-emails-dev"
+
+# KV Namespace for rate limiting
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "" # You'll need to fill this in after creating the namespace
+
+# Environment variables
+[vars]
+ENVIRONMENT = "production"
+
+# Development environment
+[env.development]
+vars = { ENVIRONMENT = "development" }
+
+# Production environment
+[env.production]
+vars = { ENVIRONMENT = "production" }
+
+# Build configuration
+[build]
+command = "npm run build"
+cwd = "."
+
+# Routes
+routes = [
+  { pattern = "api/*", zone_id = "" }, # You'll need to fill in your zone ID
+  { pattern = "*.gtd-mail.com/*", zone_id = "" } # You'll need to fill in your zone ID
+]
+
+# Cron triggers
+[triggers]
+crons = [
+  "*/5 * * * *" # Run every 5 minutes
+] 
